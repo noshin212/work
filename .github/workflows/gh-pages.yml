@@ -31,3 +31,8 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+
+permissions:
+  contents: write # リポジトリへの書き込み権限を付与
+  pages: write   # pagesへの書き込み権限を付与
+  id-token: write # GitHub Pagesのデプロイにはid-tokenも必要
