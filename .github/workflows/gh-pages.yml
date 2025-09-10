@@ -3,7 +3,7 @@ name: GitHub Pages
 on:
   push:
     branches:
-      - main  # Set a branch name to trigger deployment
+      - main
   pull_request:
 
 jobs:
@@ -13,15 +13,20 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v4
         with:
-          submodules: recursive  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
-
+          go-version: '1.20' # HugoモジュールにはGoが必要
+          
       - name: Setup Hugo
         uses: peaceiris/actions-hugo@v3
         with:
           hugo-version: '0.85.0'
 
+      - name: Download Hugo Modules
+        run: |
+          hugo mod get
+          
       - name: Build
         run: hugo --minify
 
@@ -33,6 +38,6 @@ jobs:
           publish_dir: ./public
 
 permissions:
-  contents: write # リポジトリへの書き込み権限を付与
-  pages: write   # pagesへの書き込み権限を付与
-  id-token: write # GitHub Pagesのデプロイにはid-tokenも必要
+  contents: write
+  pages: write
+  id-token: write
